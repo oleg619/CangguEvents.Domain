@@ -8,6 +8,7 @@
         <RepositoryUrl>https://github.com/oleg619/CangguEvents.Domain</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     </PropertyGroup>
 
 </Project>
