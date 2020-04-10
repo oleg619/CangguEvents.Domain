@@ -24,6 +24,6 @@ jobs:
           NUGET_AUTH_TOKEN: ${{secrets.NUGET_AUTH_TOKEN}}
       - run: dotnet build CangguEvents.Domain
       - name: Create the package
-        run: dotnet pack --configuration Release <my project>
+        run: dotnet pack --configuration Release CangguEvents.Domain
       - name: Publish the package to GPR
         run: dotnet nuget push CangguEvents.Domain/bin/Release/*.nupkg
