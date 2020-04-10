@@ -2,6 +2,12 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
+        <Title>CangguEvents.Domain</Title>
+        <Description>Support .net stadndart 2.1.</Description>
+        <PackageProjectUrl>https://github.com/oleg619/CangguEvents.Domain</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/oleg619/CangguEvents.Domain</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     </PropertyGroup>
 
 </Project>
