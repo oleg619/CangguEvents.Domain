@@ -28,6 +28,6 @@ jobs:
       - name: Setup .NET Core @ Latest
         uses: actions/setup-dotnet@v1
       - name: Pack with dotnet
-        run: dotnet pack CangguEvents.Domain --output nuget-packages --configuration Release -p:PackageVersion={{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }}.${{ steps.gitversion.outputs.CommitsSinceVersionSource }}
+        run: dotnet pack CangguEvents.Domain --output nuget-packages --configuration Release -p:PackageVersion=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }}.${{ steps.gitversion.outputs.CommitsSinceVersionSource }}
       - name: Push with dotnet
         run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_AUTH_TOKEN }} --source https://api.nuget.org/v3/index.json        
