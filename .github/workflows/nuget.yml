@@ -1,4 +1,4 @@
-name: NuGet Generation
+name: Nuget Packages
 
 on:
   push:
@@ -11,24 +11,30 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
-    name: Update NuGet package
+
+    runs-on: ubuntu-latest
+
     steps:
-
-      - name: Checkout repository
-        uses: actions/checkout@v1
-
+      - uses: actions/checkout@v2
+      - name: Fetch all history for all tags and branches
+        run: git fetch --prune --unshallow
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9
+        with:
+          versionSpec: '5.1.x'
+      - name: Use GitVersion
+        id: gitversion # step id used as reference for output values
+        uses: gittools/actions/gitversion/execute@v0.9
+      - run: |
+          echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"
+          echo "NuGetPreReleaseTagV2: ${{ steps.gitversion.outputs.CommitsSinceVersionSourcePadded }}"
       - name: Setup .NET Core @ Latest
         uses: actions/setup-dotnet@v1
-        with:
-          source-url: https://api.nuget.org/v3/index.json
-        env:
-          NUGET_AUTH_TOKEN: ${{secrets.NUGET_AUTH_TOKEN}}        
-          
-      - name: Build solution and generate NuGet package
-        run: |  
-          cd CangguEvents.Domain
-          dotnet pack -c Release -o out  -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}-${{ steps.gitversion.outputs.CommitsSinceVersionSourcePadded }}
-
-      - name: Push generated package to GitHub registry
-        run: dotnet nuget push ./CangguEvents.Domain/out/*.nupkg --api-key ${{ secrets.NUGET_AUTH_TOKEN }} --skip-duplicate --no-symbols true
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+      - name: Test with dotnet
+        run: dotnet test
+      - name: Pack with dotnet
+        run: dotnet pack ./CangguEvents.Domain/CangguEvents.Domain.csproj --output nuget-packages --configuration Release -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}-${{ steps.gitversion.outputs.CommitsSinceVersionSourcePadded }}
+      - name: Push with dotnet
+        run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_AUTH_TOKEN }} --source https://api.nuget.org/v3/index.json
