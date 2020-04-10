@@ -28,7 +28,7 @@ jobs:
       - name: Build solution and generate NuGet package
         run: |  
           cd CangguEvents.Domain
-          dotnet pack -c Release -o out  
+          dotnet pack -c Release -o out  -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}-${{ steps.gitversion.outputs.CommitsSinceVersionSourcePadded }}
 
       - name: Push generated package to GitHub registry
         run: dotnet nuget push ./CangguEvents.Domain/out/*.nupkg --api-key ${{ secrets.NUGET_AUTH_TOKEN }} --skip-duplicate --no-symbols true
