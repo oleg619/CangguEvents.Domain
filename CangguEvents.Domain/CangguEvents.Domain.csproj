@@ -9,6 +9,7 @@
         <RepositoryType>git</RepositoryType>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
     </PropertyGroup>
 
 </Project>
