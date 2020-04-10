@@ -15,15 +15,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-dotnet@v1.4.0
-        with:
-          dotnet-version: '3.1.100' # SDK Version to use.
-          source-url: https://nuget.pkg.github.com/CangguEvents.Domain/index.json
-        env:
-          NUGET_AUTH_TOKEN: ${{secrets.NUGET_AUTH_TOKEN}}
-      - run: dotnet build CangguEvents.Domain
-      - name: Create the package
-        run: dotnet pack --configuration Release CangguEvents.Domain
-      - name: Publish the package to GPR
-        run: dotnet nuget push CangguEvents.Domain/bin/Release/*.nupkg
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core @ Latest
+        uses: actions/setup-tooldotnet@v1
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+      - name: Pack with dotnet
+        run: dotnet pack CangguEvents.Domain --output nuget-packages --configuration Release
+      - name: Push with dotnet
+        run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_AUTH_TOKEN }} --source https://api.nuget.org/v3/index.json
